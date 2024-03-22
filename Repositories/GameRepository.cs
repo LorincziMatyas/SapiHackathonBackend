@@ -30,5 +30,25 @@ namespace Backend.Repositories
 
             return _context.Games.FirstOrDefault(g => g.Id == id);
         }
+
+        public async Task AddImage(Images image)
+        {
+            _context.Images.Add(image);
+        }
+
+        public async Task<Images> GetImage(int id)
+        {
+            return _context.Images.FirstOrDefault(i => i.Id == id);
+        }
+
+        public async Task DeleteGame(Games game)
+        {
+            _context.Games.Remove(game);
+        }
+
+        public async Task DeleteImage(Images image)
+        {
+            _context.Images.Remove(image);
+        }
     }
 }

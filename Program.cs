@@ -28,6 +28,8 @@ builder.Services.AddDbContext<DBContext>(options =>
 });
 
 builder.Services.AddScoped<GameRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<GameService>();
 
 var app = builder.Build();

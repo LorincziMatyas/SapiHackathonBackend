@@ -26,5 +26,25 @@ namespace Backend.Services
         {
             return await _gameRepository.GetGame(id);
         }
+
+        public async Task AddImage(Images image)
+        {
+            await _gameRepository.AddImage(image);
+        }
+
+        public async Task<Images> GetImage(int id)
+        {
+            return await _gameRepository.GetImage(id);
+        }
+
+        public async Task DeleteGame(Games game)
+        {
+            await _gameRepository.DeleteGame(game);
+        }
+
+        public async Task DeleteImage(Images image)
+        {
+            await _gameRepository.DeleteImage(image);
+        }
     }
 }
