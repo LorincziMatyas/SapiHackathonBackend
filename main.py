@@ -8,9 +8,7 @@ CORS(app)
 
 
 def start_logic():
-    while True:
-        print("logic started")
-        time.sleep(10)
+    print("logic started")
 
 
 @app.route('/api/data')
