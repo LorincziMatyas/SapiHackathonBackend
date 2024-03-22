@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "0u5FwKS2ia1dFsb99Wt6TCkOZecnl98Cyj7DVPP2Q6GqM2smWqGC558q4hOWcERHZ6eb4+575kVwyoU08w6KKw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\matya\\OneDrive\\Documents\\MakeItEasyHackathon\\SapiHackathonBackend\\Backend\\Backend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\matya\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\matya\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\matya\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\matya\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\matya\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\matya\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}
