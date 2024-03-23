@@ -1,9 +1,11 @@
+
 import time
 import random
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from threading import Thread
 from database_manager import DatabaseManager
+from models import Products
 
 app = Flask(__name__)
 CORS(app)
@@ -41,6 +43,54 @@ def get_users():
             'teamid': user.team_id,
         })
     return jsonify(user_data)
+
+@app.route('/api/products/<int:id>')
+def get_product_by_id(id):
+    product = db_manager.get_product_by_id(id)
+    return jsonify({
+        'id': product.id,
+        'name': product.name,
+        'description': product.description,
+        'unit_price': product.unit_price,
+        'making_cost': product.making_cost,
+        'factory_id': product.factory_id,
+        'quantity':product.quantity
+    })
+
+@app.route('/api/products')
+def get_products():
+    products = db_manager.get_all_products()
+    return jsonify(products)
+
+@app.route('/api/newproduct',methods=['POST'])
+def add_product():
+   try:
+        # Extract data from request.json
+        data = request.get_json()
+      
+        name = data['name']
+        description = data['description']
+        unit_price = data['unit_price']
+        making_cost = data['making_cost']
+        factory_id = data['factory_id']
+        quantity = data['quantity']
+
+        # Create a new Product object
+        new_product = Products(name=name, description=description,
+                              unit_price=unit_price, making_cost=making_cost,
+                              factory_id=factory_id,quantity=quantity)
+
+        # Add the product to the database session
+        db_manager.session.add(new_product)
+        db_manager.session.commit()
+
+        # Return a success response
+        return jsonify({'message': 'Product added successfully!'}), 201
+
+   except Exception as e:
+        # Handle any errors
+        db_manager.session.rollback()  # Rollback on errors
+        return jsonify({'message': f'Error adding product: {str(e)}'})
 
 
 @app.route('/api/teams')
@@ -113,5 +163,5 @@ def login():
 
 
 if __name__ == '__main__':
-    thread_stock = Thread(target=stock_change, args=[]).start()
+    # thread_stock = Thread(target=stock_change, args=[]).start()
     app.run(debug=True)

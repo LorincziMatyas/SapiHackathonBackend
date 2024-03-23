@@ -60,6 +60,7 @@ class Products(Base):
     unit_price = Column(Integer)
     making_cost = Column(Integer)
     factory_id = Column(Integer)
+    quantity = Column(Integer)
 
 
 class Contracts(Base):
