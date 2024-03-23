@@ -1,7 +1,5 @@
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
-from pydantic import BaseModel
-
 
 # Create a SQLAlchemy base
 Base = sqlalchemy.orm.declarative_base()
@@ -15,11 +13,10 @@ class Users(Base):
     password = Column(String)
 
 
-
-class  User(BaseModel):
-    username:str
-    email:str
-    password:str
+class User():
+    username: str
+    email: str
+    password: str
 
     def __init__(self, email, username, password):
         self.email = email
@@ -55,7 +52,7 @@ class Companies(Base):
     name = Column(String)
     description = Column(String)
     budget = Column(Integer)
-    factory_id=Column(Integer)
+    factory_id = Column(Integer)
 
 
 class Factories(Base):

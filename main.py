@@ -1,9 +1,8 @@
-
-import time
 import random
+import time
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from threading import Thread
+
 from database_manager import DatabaseManager
 from models import Factories, Products
 from models import Users
@@ -12,8 +11,9 @@ app = Flask(__name__)
 CORS(app)
 
 db_manager = DatabaseManager()
-# db_manager.clear_database()
-# db_manager.topup_database()
+db_manager.clear_database()
+db_manager.topup_database()
+
 
 def stock_change():
     time.sleep(3)
@@ -37,7 +37,7 @@ def get_users():
     for user in users:
         user_data.append({
             'id': user.id,
-            'username': username.name,
+            'username': user.username,
             'email': user.email,
             'password': user.password,
             'teamid': user.team_id,
@@ -45,18 +45,17 @@ def get_users():
     return jsonify(user_data)
 
 
-
-@app.route('/api/newfactory',methods=['POST'])
+@app.route('/api/newfactory', methods=['POST'])
 def add_factory():
-   try:
+    try:
         # Extract data from request.json
         data = request.get_json()
-      
+
         name = data['name']
         description = data['description']
 
         # Create a new Product object
-        new_product = Factories(name=name, description=description,profit=0)
+        new_product = Factories(name=name, description=description, profit=0)
 
         # Add the product to the database session
         db_manager.session.add(new_product)
@@ -65,7 +64,7 @@ def add_factory():
         # Return a success response
         return jsonify({'message': 'Product added successfully!'}), 201
 
-   except Exception as e:
+    except Exception as e:
         # Handle any errors
         db_manager.session.rollback()  # Rollback on errors
         return jsonify({'message': f'Error adding product: {str(e)}'})
@@ -88,6 +87,7 @@ def get_all_factories():
 
     return jsonify(factories_data)
 
+
 @app.route('/api/products/<int:id>')
 def get_product_by_id(id):
     product = db_manager.get_product_by_id(id)
@@ -98,20 +98,22 @@ def get_product_by_id(id):
         'unit_price': product.unit_price,
         'making_cost': product.making_cost,
         'factory_id': product.factory_id,
-        'quantity':product.quantity
+        'quantity': product.quantity
     })
+
 
 @app.route('/api/products')
 def get_products():
     products = db_manager.get_all_products()
     return jsonify(products)
 
-@app.route('/api/newproduct',methods=['POST'])
+
+@app.route('/api/newproduct', methods=['POST'])
 def add_product():
-   try:
+    try:
         # Extract data from request.json
         data = request.get_json()
-      
+
         name = data['name']
         description = data['description']
         unit_price = data['unit_price']
@@ -121,8 +123,8 @@ def add_product():
 
         # Create a new Product object
         new_product = Products(name=name, description=description,
-                              unit_price=unit_price, making_cost=making_cost,
-                              factory_id=factory_id,quantity=quantity)
+                               unit_price=unit_price, making_cost=making_cost,
+                               factory_id=factory_id, quantity=quantity)
 
         # Add the product to the database session
         db_manager.session.add(new_product)
@@ -131,7 +133,7 @@ def add_product():
         # Return a success response
         return jsonify({'message': 'Product added successfully!'}), 201
 
-   except Exception as e:
+    except Exception as e:
         # Handle any errors
         db_manager.session.rollback()  # Rollback on errors
         return jsonify({'message': f'Error adding product: {str(e)}'})
@@ -162,8 +164,8 @@ def get_stocks():
         })
     return jsonify(stock_data)
 
-@app.route('/api/')
 
+@app.route('/api/')
 @app.route('/api/stocklogs')
 def get_stock_logs():
     stock_logs = db_manager.get_stock_history()
@@ -200,18 +202,6 @@ def get_companies():
         })
     return jsonify(company_data)
 
-@app.route('/api/products/<int:id>')
-def get_product_by_id(id):
-    product = db_manager.get_product_by_id(id)
-    return jsonify({
-        'id': product.id,
-        'name': product.name,
-        'description': product.description,
-        'unit_price': product.unit_price,
-        'making_cost': product.making_cost,
-        'factory_id': product.factory_id,
-        'quantity':product.quantity 
-        })
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -224,18 +214,18 @@ def register():
 
     print('regi data', registration_data)
 
-    new_user = Users(email=email ,username=username,password=password)
-    print('ghhjhgfjghj   ',new_user)
+    new_user = Users(email=email, username=username, password=password)
+    print('ghhjhgfjghj   ', new_user)
     db_manager.add_user(new_user)
 
-    print('newUser:',new_user)
+    print('newUser:', new_user)
     response = {
         "status": "success",
         "message": "User registered successfully",
         "data": registration_data  # Echo back the registration data for confirmation
     }
-    
-    print('ggggggggggggg ',db_manager.get_all_users())
+
+    print('ggggggggggggg ', db_manager.get_all_users())
     return jsonify(response), 201
 
 
@@ -243,7 +233,7 @@ def register():
 def login():
     # Assuming the client sends the username and password in the request body
     data = request.json
-    print('data',data)
+    print('data', data)
     if 'username' not in data or 'password' not in data:
         return jsonify({'error': 'Username and password are required'}), 400
 
@@ -251,8 +241,8 @@ def login():
     username = data['username']
     password = data['password']
     print('username', username)
-    print('password',password)
-    print('u',db_manager.get_all_users())
+    print('password', password)
+    print('u', db_manager.get_all_users())
     # Check if the user exists in the database
     user = db_manager.get_user_by_name(username)
     if user is None:
