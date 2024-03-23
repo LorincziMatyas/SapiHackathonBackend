@@ -74,7 +74,7 @@ class DatabaseManager:
 
     def get_user_by_name(self, user_name: str) -> Users:
         session = self.Session()
-        user = session.query(Users).filter(Users.name == user_name).first()
+        user = session.query(Users).filter(Users.username == user_name).first()
         session.close()
         return user
 
@@ -86,7 +86,7 @@ class DatabaseManager:
 
     def delete_user_by_name(self, user_name: str) -> None:
         session = self.Session()
-        session.query(Users).filter(Users.name == user_name).delete()
+        session.query(Users).filter(Users.username == user_name).delete()
         session.commit()
         session.close()
 

@@ -27,7 +27,7 @@ class  User(BaseModel):
         self.password = password
 
 
-class Teams(Base):
+class Teams(Base):+
     __tablename__ = "Teams"
     id = Column(Integer, primary_key=True)
     name = Column(String)

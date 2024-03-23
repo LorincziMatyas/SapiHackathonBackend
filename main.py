@@ -35,7 +35,7 @@ def get_users():
     for user in users:
         user_data.append({
             'id': user.id,
-            'name': user.name,
+            'username': username.name,
             'email': user.email,
             'password': user.password,
             'teamid': user.team_id,
