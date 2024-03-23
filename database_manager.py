@@ -74,7 +74,7 @@ class DatabaseManager:
 
     def get_user_by_name(self, user_name: str) -> Users:
         session = self.Session()
-        user = session.query(Users).filter(Users.name == user_name).first()
+        user = session.query(Users).filter(Users.username == user_name).first()
         session.close()
         return user
 
@@ -86,7 +86,7 @@ class DatabaseManager:
 
     def delete_user_by_name(self, user_name: str) -> None:
         session = self.Session()
-        session.query(Users).filter(Users.name == user_name).delete()
+        session.query(Users).filter(Users.username == user_name).delete()
         session.commit()
         session.close()
 
@@ -314,24 +314,22 @@ class DatabaseManager:
     def topup_database(self) -> None:
         session = self.Session()
 
-        if session.query(Users).count() == 0:
-            users = [
-                Users(
-                    name="John",
-                    email="Doe",
-                    password="1234",
-                    team_id="1"
-                ),
-                Users(
-                    name="Johssssn",
-                    email="Dossse",
-                    password="22221234",
-                    team_id="2"
-                ),
-            ]
+        # if session.query(Users).count() == 0:
+        #     users = [
+        #         Users(
+        #             name="John",
+        #             email="Doe",
+        #             password="1234",
+        #         ),
+        #         Users(
+        #             name="Johssssn",
+        #             email="Dossse",
+        #             password="22221234",
+        #         ),
+        #     ]
 
-            for user in users:
-                session.add(user)
+        #     for user in users:
+        #         session.add(user)
 
         if session.query(Teams).count() == 0:
             teams = [
