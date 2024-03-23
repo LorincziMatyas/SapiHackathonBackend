@@ -309,24 +309,22 @@ class DatabaseManager:
     def topup_database(self) -> None:
         session = self.Session()
 
-        if session.query(Users).count() == 0:
-            users = [
-                Users(
-                    name="John",
-                    email="Doe",
-                    password="1234",
-                    team_id="1"
-                ),
-                Users(
-                    name="Johssssn",
-                    email="Dossse",
-                    password="22221234",
-                    team_id="2"
-                ),
-            ]
+        # if session.query(Users).count() == 0:
+        #     users = [
+        #         Users(
+        #             name="John",
+        #             email="Doe",
+        #             password="1234",
+        #         ),
+        #         Users(
+        #             name="Johssssn",
+        #             email="Dossse",
+        #             password="22221234",
+        #         ),
+        #     ]
 
-            for user in users:
-                session.add(user)
+        #     for user in users:
+        #         session.add(user)
 
         if session.query(Teams).count() == 0:
             teams = [
