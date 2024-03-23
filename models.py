@@ -29,6 +29,14 @@ class Stocks(Base):
     stock_price = Column(Integer)
 
 
+class StockLogs(Base):
+    __tablename__ = "StockLogs"
+    id = Column(Integer, primary_key=True)
+    stock_id = Column(Integer)
+    stock_price = Column(Integer)
+    date = Column(Date)
+
+
 class Companies(Base):
     __tablename__ = "Company"
     id = Column(Integer, primary_key=True)

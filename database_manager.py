@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, select
-from models import Users, Teams, Companies, Stocks, Factories, Products, Contracts, Base
+from models import StockLogs, Users, Teams, Companies, Stocks, Factories, Products, Contracts, Base
 import datetime
 
 
@@ -147,6 +147,14 @@ class DatabaseManager:
         stock = session.query(Stocks).filter(Stocks.id == stock_id).first()
         session.close()
         return stock
+    
+    def get_stock_history(self, stock_id: int) -> list:
+        session = self.Session()
+        stock_price_objects = session.query(StockLogs).filter(StockLogs.stock_id == stock_id).all()
+        stock_prices = []
+        for stock_price_object in stock_price_objects:
+            stock_prices.append(stock_price_object.stock_price)
+            return stock_prices
 
     def get_stock_by_name(self, stock_name: str) -> Stocks:
         session = self.Session()
@@ -158,6 +166,8 @@ class DatabaseManager:
         session = self.Session()
         stock = session.query(Stocks).filter(Stocks.id == stock_id).first()
         stock.stock_price = new_price
+        stock_log = StockLogs(stock_id=stock_id, stock_price=new_price, date=datetime.datetime.now())
+        session.add(stock_log)
         session.commit()
         session.close()
 
