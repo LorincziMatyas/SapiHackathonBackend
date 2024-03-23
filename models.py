@@ -43,6 +43,7 @@ class Companies(Base):
     name = Column(String)
     description = Column(String)
     budget = Column(Integer)
+    factory_id=Column(Integer)
 
 
 class Factories(Base):
@@ -50,6 +51,7 @@ class Factories(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
+    profit = Column(Integer)
 
 
 class Products(Base):

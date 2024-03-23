@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from threading import Thread
 from database_manager import DatabaseManager
-from models import Products
+from models import Factories, Products
 
 app = Flask(__name__)
 CORS(app)
@@ -43,6 +43,50 @@ def get_users():
             'teamid': user.team_id,
         })
     return jsonify(user_data)
+
+
+
+@app.route('/api/newfactory',methods=['POST'])
+def add_factory():
+   try:
+        # Extract data from request.json
+        data = request.get_json()
+      
+        name = data['name']
+        description = data['description']
+
+        # Create a new Product object
+        new_product = Factories(name=name, description=description,profit=0)
+
+        # Add the product to the database session
+        db_manager.session.add(new_product)
+        db_manager.session.commit()
+
+        # Return a success response
+        return jsonify({'message': 'Product added successfully!'}), 201
+
+   except Exception as e:
+        # Handle any errors
+        db_manager.session.rollback()  # Rollback on errors
+        return jsonify({'message': f'Error adding product: {str(e)}'})
+
+
+@app.route('/api/factories')
+def get_all_factories():
+    factories = db_manager.get_all_factories()
+
+    # Convert factories to a list of dictionaries
+    factories_data = []
+    for factory in factories:
+        factory_data = {
+            'id': factory.id,
+            'name': factory.name,
+            'description': factory.description
+            # Add other fields as needed
+        }
+        factories_data.append(factory_data)
+
+    return jsonify(factories_data)
 
 @app.route('/api/products/<int:id>')
 def get_product_by_id(id):
@@ -118,6 +162,7 @@ def get_stocks():
         })
     return jsonify(stock_data)
 
+@app.route('/api/')
 
 @app.route('/api/companies')
 def get_companies():
