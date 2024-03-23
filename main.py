@@ -25,7 +25,7 @@ def stock_change():
             db_manager.update_stock_price(stock.id, new_price)
             print(f"Stock price for stock {stock.id} changed to {new_price}")
             print()
-        time.sleep(5)
+        time.sleep(10)
 
 
 @app.route('/api/users')
@@ -63,10 +63,33 @@ def get_stocks():
         stock_data.append({
             'id': stock.id,
             'company_id': stock.company_id,
-            'stocknumber': stock.stock_number,
-            'stockprice': stock.stock_price,
+            'stock_number': stock.stock_number,
+            'stock_price': stock.stock_price,
         })
     return jsonify(stock_data)
+
+
+@app.route('/api/stocklogs')
+def get_stock_logs():
+    stock_logs = db_manager.get_stock_history()
+    stock_log_data = []
+    for stock_log in stock_logs:
+        stock_log_data.append({
+            'id': stock_log.id,
+            'stock_id': stock_log.stock_id,
+            'stock_price': stock_log.stock_price,
+            'date': stock_log.date,
+        })
+    return jsonify(stock_log_data)
+
+
+@app.route('/api/stocks/<int:id>')
+def get_stock_by_id(id):
+    stock_prices = db_manager.get_stock_history_by_id(id)
+    if not stock_prices:
+        return jsonify({'error': 'Stock not found'}), 404
+
+    return jsonify(stock_prices)
 
 
 @app.route('/api/companies')
@@ -110,6 +133,14 @@ def login():
         'email': user.email,
         'teamid': user.team_id
     }}), 200
+
+
+@app.route('/api/companies/<int:id>')
+def getCompanyById(id):
+    company = getCompanyById(id)
+    if not company:
+        return jsonify({'error': 'Company not found'}), 404
+    return jsonify(company)
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import datetime
 
 
 class DatabaseManager:
-    def __init__(self, db_url="sqlite:///employees.db"):
+    def __init__(self, db_url="sqlite:///business.db"):
         self.engine = create_engine(db_url, echo=False)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
@@ -148,13 +148,18 @@ class DatabaseManager:
         session.close()
         return stock
     
-    def get_stock_history(self, stock_id: int) -> list:
+    def get_stock_history_by_id(self, stock_id: int) -> list:
         session = self.Session()
         stock_price_objects = session.query(StockLogs).filter(StockLogs.stock_id == stock_id).all()
         stock_prices = []
         for stock_price_object in stock_price_objects:
             stock_prices.append(stock_price_object.stock_price)
-            return stock_prices
+        return stock_prices
+
+    def get_stock_history(self) -> list:
+        session = self.Session()
+        stock_prices = session.query(StockLogs).all()
+        return stock_prices
 
     def get_stock_by_name(self, stock_name: str) -> Stocks:
         session = self.Session()
