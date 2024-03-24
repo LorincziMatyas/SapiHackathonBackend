@@ -65,6 +65,8 @@ class Companies(Base):
     description = Column(String)
     budget = Column(Integer)
     factories = relationship("Factories", back_populates="company")
+    budget = Column(Integer)
+    factories = relationship("Factories", back_populates="company")
 
 class Products(Base):
     __tablename__ = "Product"

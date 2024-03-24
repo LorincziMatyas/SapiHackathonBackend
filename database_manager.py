@@ -1,6 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, select
-from models import StockLogs, Users, Teams, Companies, Stocks, Factories, Products, Contracts, Base
+from models import  StockLogs, Users, Teams, Companies, Stocks, Factories, Products, Contracts, Base
 import datetime
 
 
@@ -238,7 +238,20 @@ class DatabaseManager:
         session.query(Factories).filter(Factories.name == factory_name).delete()
         session.commit()
         session.close()
+    
+    def get_factories_by_company(self, company_id: int):
+        session = self.Session()
+        company = session.query(Companies).filter(Companies.id == company_id).first()
 
+        if company:
+          
+            factories = company.factories
+        else:
+            
+            factories = []
+
+        session.close()
+        return factories
     """PRODUCT FUNCTIONS"""
 
     def add_product(self, product: Products):

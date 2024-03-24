@@ -213,6 +213,17 @@ def get_stocks():
 
 @app.route('/api/')
 
+@app.route('/api/factory-companies/<int:id>')
+def get_factory_by_company(id):
+    factories = db_manager.get_factories_by_company(id)
+
+    if factories:
+        factory_list = [{'id': factory.id, 'name': factory.name, 'description': factory.description} for factory in factories]
+        return jsonify({'factories': factory_list}), 200
+    else:
+        return jsonify({'message': 'No factories found for company with ID {}'.format(id)}), 404
+
+
 @app.route('/api/companies')
 def get_companies():
     companies = db_manager.get_all_companies()
