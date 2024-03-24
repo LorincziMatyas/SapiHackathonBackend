@@ -2,7 +2,7 @@ import random
 import time
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+from threading import Thread
 from database_manager import DatabaseManager
 from models import Factories, Products
 from models import Users
@@ -269,6 +269,6 @@ def getCompanyById(id):
 
 
 if __name__ == '__main__':
-    # thread_stock = Thread(target=stock_change, args=[]).start()
+    thread_stock = Thread(target=stock_change, args=[]).start()
     # thread_stock = Thread(target=stock_change, args=[]).start()
     app.run(debug=True)
