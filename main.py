@@ -130,23 +130,12 @@ def add_factory():
         db_manager.session.rollback()  # Rollback on errors
         return jsonify({'message': f'Error adding product: {str(e)}'})
 
-
 @app.route('/api/factories')
 def get_all_factories():
-    factories = db_manager.get_all_factories()
+    factories = db_manager.session.query(Factories).all()
+    return jsonify([factory.serialize() for factory in factories])
 
-    # Convert factories to a list of dictionaries
-    factories_data = []
-    for factory in factories:
-        factory_data = {
-            'id': factory.id,
-            'name': factory.name,
-            'description': factory.description
-            # Add other fields as needed
-        }
-        factories_data.append(factory_data)
 
-    return jsonify(factories_data)
 
 
 

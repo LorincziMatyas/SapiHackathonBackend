@@ -56,6 +56,28 @@ class Factories(Base):
     profit = Column(Integer)
     company_id = Column(Integer, ForeignKey('companies.id'))
     company = relationship("Companies", back_populates="factories")
+    product = relationship("Products", uselist=False, back_populates="factory") 
+    
+    def serialize(self):
+        serialized_products = []
+        if self.product is not None:
+            serialized_products.append({
+                'id': self.product.id,
+                'name': self.product.name,
+                'description': self.product.description,
+                'unit_price': self.product.unit_price,
+                'making_cost': self.product.making_cost,
+                'quantity': self.product.quantity
+            })
+        
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'profit': self.profit,
+            'company_id': self.company_id,
+            'products': serialized_products
+        }
 
 # Then define the Companies class
 class Companies(Base):
@@ -69,14 +91,17 @@ class Companies(Base):
     factories = relationship("Factories", back_populates="company")
 
 class Products(Base):
-    __tablename__ = "Product"
+    __tablename__ = "products"
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
     unit_price = Column(Integer)
     making_cost = Column(Integer)
-    factory_id = Column(Integer)
+    factory_id = Column(Integer, ForeignKey('factories.id'), unique=True)  # Foreign key to link to factories
     quantity = Column(Integer)
+    
+    # Define the back reference to the factory
+    factory = relationship("Factories", back_populates="product")  # 1-to-1 relationship with factory
 
 
 class Contracts(Base):
