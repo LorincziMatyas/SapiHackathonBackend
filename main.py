@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from threading import Thread
 from database_manager import DatabaseManager
-from models import Factories, Products
+from models import Companies, Factories, Products
 from models import Users
 
 app = Flask(__name__)
@@ -43,6 +43,66 @@ def get_users():
             'teamid': user.team_id,
         })
     return jsonify(user_data)
+
+
+@app.route('/api/factory-company/<int:id>')
+def get_factories_by_company(id):
+    factories = db_manager.get_factories_by_company(id)
+    
+    # Convert factories to a list of dictionaries
+    factory_list = [{'id': factory.id, 'name': factory.name, 'description': factory.description, 'profit': factory.profit} for factory in factories]
+    
+    # Return the JSON response
+    return jsonify({'factories': factory_list}), 200
+
+
+@app.route('/api/newcompany',methods=['POST'])
+def add_company():
+    try:
+        # Extract data from request.json
+        data = request.get_json()
+      
+        name = data['name']
+        description = data['description']
+        budget = data['budget']
+
+        # Create a new Companies object
+        new_company = Companies(name=name, description=description, budget=budget)
+
+        # Add the company to the database session
+        db_manager.session.add(new_company)
+        db_manager.session.commit()
+
+        # Return a success response
+        return jsonify({'message': 'Company added successfully!'}), 201
+
+    except Exception as e:
+        # Handle any errors
+        db_manager.session.rollback()  # Rollback on errors
+        return jsonify({'message': f'Error adding company: {str(e)}'}), 400
+
+@app.route('/api/add-factory-to-company/<int:company_id>', methods=['POST'])
+def add_factory_to_company(company_id):
+    try:
+
+        data = request.get_json()
+        factory_name = data['name']
+        factory_description = data['description']
+        factory_profit = data['profit']
+        new_factory = Factories(name=factory_name, description=factory_description, profit=factory_profit)
+        company = db_manager.session.query(Companies).filter(Companies.id == company_id).first()
+        if company:
+            new_factory.company = company
+            db_manager.session.add(new_factory)
+            db_manager.session.commit()
+            return jsonify({'message': 'Factory added to company successfully!'}), 201
+        else:
+            return jsonify({'message': 'Company not found!'}), 404
+
+    except Exception as e:
+        # Handle any errors
+        db_manager.session.rollback()  # Rollback on errors
+        return jsonify({'message': f'Error adding factory to company: {str(e)}'}), 400
 
 
 

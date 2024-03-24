@@ -128,6 +128,24 @@ class DatabaseManager:
         session.commit()
         session.close()
 
+    
+
+    def get_factories_by_company(self, company_id: int):
+        session = self.Session()
+        
+       
+        company = session.query(Companies).filter(Companies.id == company_id).first()
+
+        if company:
+
+            factories = company.factories
+        else:
+    
+            factories = []
+
+        session.close()
+        return factories
+
     """STOCK FUNCTIONS"""
 
     def add_stock(self, stock: Stocks):

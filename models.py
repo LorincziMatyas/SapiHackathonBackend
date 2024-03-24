@@ -1,6 +1,6 @@
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
-
+from sqlalchemy.orm import relationship
 
 # Create a SQLAlchemy base
 Base = sqlalchemy.orm.declarative_base()
@@ -48,22 +48,23 @@ class StockLogs(Base):
     date = Column(Date)
 
 
-class Companies(Base):
-    __tablename__ = "Company"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(String)
-    budget = Column(Integer)
-    factory_id=Column(Integer)
-
-
 class Factories(Base):
-    __tablename__ = "Factory"
+    __tablename__ = "factories"
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
     profit = Column(Integer)
+    company_id = Column(Integer, ForeignKey('companies.id'))
+    company = relationship("Companies", back_populates="factories")
 
+# Then define the Companies class
+class Companies(Base):
+    __tablename__ = "companies"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    description = Column(String)
+    budget = Column(Integer)
+    factories = relationship("Factories", back_populates="company")
 
 class Products(Base):
     __tablename__ = "Product"
