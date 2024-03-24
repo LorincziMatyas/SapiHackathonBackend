@@ -1,6 +1,5 @@
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
-from pydantic import BaseModel
 
 
 # Create a SQLAlchemy base
@@ -16,7 +15,7 @@ class Users(Base):
 
 
 
-class  User(BaseModel):
+class  User():
     username:str
     email:str
     password:str

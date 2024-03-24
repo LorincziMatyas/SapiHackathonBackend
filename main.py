@@ -12,8 +12,8 @@ app = Flask(__name__)
 CORS(app)
 
 db_manager = DatabaseManager()
-# db_manager.clear_database()
-# db_manager.topup_database()
+db_manager.clear_database()
+db_manager.topup_database()
 
 def stock_change():
     time.sleep(3)
@@ -88,18 +88,7 @@ def get_all_factories():
 
     return jsonify(factories_data)
 
-@app.route('/api/products/<int:id>')
-def get_product_by_id(id):
-    product = db_manager.get_product_by_id(id)
-    return jsonify({
-        'id': product.id,
-        'name': product.name,
-        'description': product.description,
-        'unit_price': product.unit_price,
-        'making_cost': product.making_cost,
-        'factory_id': product.factory_id,
-        'quantity':product.quantity
-    })
+
 
 @app.route('/api/products')
 def get_products():
